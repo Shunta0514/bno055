@@ -21,19 +21,17 @@ writer.writerow(csvColumn)
 
 ser = serial.Serial(COM,bitRate) #ポートの情報を記入
 count = 0
-loop = 1
+loop = True
 while(loop):
     count += 1
-    print(count)
     value =[]
     for num in range(0,valueNum):
-        num += 1
-        value.append(ser.readline().decode('utf-8').rstrip('\n'))
+        value.append(ser.readline().decode('utf-8').rstrip('\r\n'))
     print(value)
         
     writer.writerow(value)
     if(count > 400000):
-        loop = 0
+        loop = False
         
 f.close()
     
