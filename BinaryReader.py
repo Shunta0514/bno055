@@ -19,12 +19,14 @@ while(1):
         data = fb.read()
         print(type(data))
         print(data)
+        sData = data.decode('utf-8').rsplit('\r\n')
+        print(sData)
+        fData = []
+        for list in range(len(sData)):
+            fData.append(float(sData[list]))
+            print(fData)
+        
     fb.close()
     
-    with open('./imu_binary_data/'+ filename + '.dat','r',encoding='UTF-8') as f:
-        List = f.readlines()
-        FloatList = [float(n) for n in List]
-        print(FloatList)
-    f.close()
     
     
