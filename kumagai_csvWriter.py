@@ -6,7 +6,22 @@ import datetime
 import csv
 import os
 
+def judge_time_data():
+    
+    while(True):
+        
+        try:
+            data = float(ser.readline().decode('utf-8').rstrip('\r\n'))
+            
+            if data > 1000:
+                
+                return data
+            
+        except:
+            pass
+
 if __name__ == '__main__':
+    
     COM = "COM6"
     positionTipes = 'pTipe1'
     roadTipes = 'carpet'
@@ -19,23 +34,22 @@ if __name__ == '__main__':
     os.makedirs(csv_dir, exist_ok=True)
 
     status = 'f'
-    start_record = False
     data = 0
     value =[]
+    DATA_LENGTH = 15
     count = 0
     ser = serial.Serial(COM,bitRate) #ポートの情報を記入
-
     
     while(1):
         #キーボード押下時の処理
         if msvcrt.kbhit():
             
             status = msvcrt.getch()
-            status = status.decode()
+            
+            if (status.decode() == 's') or (status.decode() == 'f'):
+                status = status.decode()
             
             if status == 's':
-                
-                start_record = True
                 
                 now = datetime.datetime.now()
                 csvFileName = csv_dir + now.strftime(('%Y%m%d_%H%M%S')) + '_' + sensorPosition + '_' +positionTipes + '_' + roadTipes + '_' + runTimes + '.csv'
@@ -44,7 +58,7 @@ if __name__ == '__main__':
                 fwriter = csv.writer(csvf)
                 fwriter.writerow(csvColumn)
                 
-                print('記録開始')
+                print('記録中：', csvFileName)
             
             elif status == 'f':
                 
@@ -58,43 +72,18 @@ if __name__ == '__main__':
             pass
         
         elif status == 's':
-            
-            if start_record:
-                start_record = False
-                judge_record = False
-                while(True):
-                    for cnt in range(0,30):
-                        try:
-                            empty = ser.readline().decode('utf-8').rstrip('\r\n')
-                        except:
-                            pass
-                            
-                            
-                            
-                    data = float(ser.readline().decode('utf-8').rstrip('\r\n'))
-                    print('data'+ str(data))
-                    if float(data) > 1000:
-                        judge_record = True
-                    #if judge_record:
-                    #    for cnt in range(0,3):
-                    #        ser.readline().decode('utf-8').rstrip('\n')
-                        break
-                      
-            
-            for data in range(0,valueNum):
-                #print(ser.readline().decode('utf-8').rstrip('\n'))
-                #if ser.readline().decode('utf-8').rstrip('\n') == '':
-                    #value.append('NUN')
-                    #pass
-                #else:
-                value.append(float(ser.readline().decode('utf-8').rstrip('\r\n')))
-                count += 1
-                print(value)
-    
                 
-            fwriter.writerow(value)
-            #初期化
-            value = [] 
+            try:
+                
+                time_data = judge_time_data()
+                value.append(time_data)
+                
+                for data_num in range(DATA_LENGTH-1):
+                    value.append(float(ser.readline().decode('utf-8').rstrip('\r\n')))
             
-    
-        
+            except:
+                print('読み込みエラー')
+            
+            print(value)
+            fwriter.writerow(value)
+            value = []

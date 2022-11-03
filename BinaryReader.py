@@ -22,11 +22,11 @@ while(1):
         sData = data.decode('utf-8').rsplit('\r\n')
         print(sData)
         fData = []
-        
+        """
         for list in range(16, len(sData)):
             fData.append(float(sData[list]))
             print(fData)
-        
+        """
     fb.close()
     
     
