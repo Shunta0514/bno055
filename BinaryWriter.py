@@ -56,6 +56,7 @@ if __name__ == '__main__':
                 
                 start_record = False
                 judge_record = False
+                
                 """
                 while(True):
                     data = float(ser.readline().decode('utf-8').rstrip('\n'))

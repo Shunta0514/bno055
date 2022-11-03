@@ -3,6 +3,7 @@ import time
 import serial
 import datetime
 import csv
+import os
 
 
 
@@ -14,8 +15,10 @@ Position = ['frontR','backL','frontL','backR','handle']
 bitRate = 921600
 valueNum = 15
 csvFileName=[]
+test_dir = './sensor_test/'
+os.makedirs(test_dir, exist_ok=True)
 for n in range(0,5):
-    csvFileName.append(positionTipes + '_' + roadTipes + '_' + runTimes  +  '_' + Position[n]+'.csv')
+    csvFileName.append(test_dir + positionTipes + '_' + roadTipes + '_' + runTimes  +  '_' + Position[n]+'.csv')
 csvColumn = ['時刻(ms)','相対方位(w)','相対方位(x)','相対方位(y)','相対方位(z)','角速度(x)','角速度(y)','角速度(z)','加速度-重力加速度(x)','加速度-重力加速度(y)','加速度-重力加速度(z)','Sys','Gyro','Accel','Mag']
 f0= open(csvFileName[0], 'w',newline="")
 f0writer = csv.writer(f0)
@@ -78,7 +81,7 @@ while(loop):
     f3writer.writerow(value3)
     f4writer.writerow(value4)
     
-    if(count == 1000):
+    if(count == 1000000):
         loop = 0
 
 f0.close()

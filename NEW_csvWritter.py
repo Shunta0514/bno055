@@ -60,10 +60,6 @@ if __name__ == '__main__':
         elif status == 's':
             
             if start_record:
-                empty = ser.readline()
-                print("処理を開始")
-                time.sleep(10)
-                print("10秒待機しました。")
                 start_record = False
                 judge_record = False
                 while(True):
